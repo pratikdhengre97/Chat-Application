@@ -1,5 +1,13 @@
 FROM eclipse-temurin:21-jdk-jammy
+
 WORKDIR /app
-COPY target/*.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+
+# Copy everything
+COPY . .
+
+# Build jar inside Docker
+RUN chmod +x mvnw
+RUN ./mvnw clean package -DskipTests
+
+# Run app
+ENTRYPOINT ["java","-jar","target/*.jar"]
